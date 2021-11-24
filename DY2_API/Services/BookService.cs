@@ -12,7 +12,7 @@ namespace DY2_API.Services
             _libContext = context;
         }
 
-        public async Task<BookDto?> AddBook(BookDto? dto)
+        public async Task<BookDto?> AddBook(BookDto dto)
         {
             Author? author = await _libContext.Authors.SingleOrDefaultAsync(a => a.Id == dto.AuthorId);
             if (author == null) return null;
@@ -27,7 +27,7 @@ namespace DY2_API.Services
             _libContext.Books.Add(book);
             _libContext.SaveChanges();
 
-            return new BookDto()
+            BookDto? result = new BookDto()
             {
                 Id = book.Id,
                 Name = book.Name,
@@ -36,6 +36,8 @@ namespace DY2_API.Services
                 AuthorFirstName = book.Author.FirstName,
                 AuthorLastName = book.Author.LastName
             };
+
+            return result;
         }
 
         public async Task<bool> Delete(int bookId)
